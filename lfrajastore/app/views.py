@@ -1,10 +1,9 @@
-from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Product
 
 
 def product_list(request):
-    products = Product.objects.all().values(
-        'id', 'name', 'description', 'price', 'file')
-    products_list = list(products)  # Convert the QuerySet to a list
-    return JsonResponse(products_list, safe=False)
+    products = Product.objects.all()
+    data = [{'id': product.id, 'name': product.name, 'price': product.price,
+             'file': product.file.url} for product in products]
+    return JsonResponse(data, safe=False)
